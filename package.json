@@ -14,7 +14,8 @@
   },
   "scripts": {
     "start": "ts-node src/index.ts",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon src/index.ts",
+    "dev-unlocked": "nodemon src/index.ts unlocked"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
