@@ -1,9 +1,22 @@
-import { Response } from 'express';
-
-export function generateErrorJson(message: string) {
-  return { error: { name: 'Authorization error', message } };
+export class ApiError {
+  constructor(code: number, name: string, message: string) {
+    this.code = code;
+    this.name = name;
+    this.message = message;
+  }
+  code: number;
+  name: string;
+  message: string;
 }
 
-export function sendAuthentificationError(message: string, res: Response) {
-  res.status(401).json(generateErrorJson(message));
+export class InvalidBodyApiError extends ApiError {
+  constructor(message: string) {
+    super(400, 'Invalid body', message);
+  }
+}
+
+export class AuthorizationApiError extends ApiError {
+  constructor(message: string) {
+    super(401, 'Authorization error', message);
+  }
 }

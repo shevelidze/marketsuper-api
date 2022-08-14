@@ -3,16 +3,18 @@ import Requestor from '../utils/Requestor';
 import requestDb from '../utils/requestDb';
 
 export interface User {
-  id: ObjectId;
   email: string;
+  passwordHash: string;
   firstName: string;
   lastName: string;
-  address?: string;
+  address: string | null;
   cart: ObjectId[]; // items ids
 }
 
-const requestUsers: Requestor<Collection<User>> = (main) => {
-  return requestDb(({ db }) => main(db.collection<User>('users')));
+const requestUsers: Requestor<Collection<User>> = async (main) => {
+  return await requestDb(
+    async ({ db }) => await main(db.collection<User>('users'))
+  );
 };
 
-export { requestUsers };
+export default requestUsers;

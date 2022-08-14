@@ -1,4 +1,4 @@
-import { verify, JsonWebTokenError, JwtPayload } from 'jsonwebtoken';
+import { verify, JsonWebTokenError, JwtPayload, sign } from 'jsonwebtoken';
 import { secretKey } from '../configs';
 
 export interface UserTokenPayload extends JwtPayload {
@@ -6,7 +6,7 @@ export interface UserTokenPayload extends JwtPayload {
   email: string;
   firstName: string;
   lastName: string;
-  address?: string;
+  address: string | null;
 }
 
 export function getTokenFromHeader(header: string): string | null {
@@ -20,4 +20,8 @@ export function getTokenPayload(token: string) {
     throw new JsonWebTokenError('invalid payload.');
 
   return tokenPayload as UserTokenPayload;
+}
+
+export function createUserToken(payload: UserTokenPayload) {
+  return sign(payload, secretKey);
 }

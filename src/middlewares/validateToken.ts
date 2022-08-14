@@ -1,11 +1,11 @@
 import { RequestHandler, Request } from 'express';
 import { JsonWebTokenError } from 'jsonwebtoken';
+import { AuthorizationApiError } from '../utils/errors';
 import {
   getTokenFromHeader,
   getTokenPayload,
   UserTokenPayload,
 } from '../utils/token';
-import { sendAuthentificationError } from '../utils/errors';
 
 export interface AuthorizedRequest extends Request {
   tokenPayload: UserTokenPayload;
@@ -26,28 +26,21 @@ const validateTokenMiddleware: RequestHandler = (req, res, next) => {
 
   const authorizationHeader = req.get('Authorization');
 
-  if (authorizationHeader === undefined) {
-    sendAuthentificationError('No Authorization header found.', res);
-    return;
-  }
+  if (authorizationHeader === undefined)
+    throw new AuthorizationApiError('No Authorization header found.');
 
   const token = getTokenFromHeader(authorizationHeader);
 
-  if (token === null) {
-    sendAuthentificationError(
-      'Invalid Authorization header. Expected "Bearer <JWT>".',
-      res
+  if (token === null)
+    throw new AuthorizationApiError(
+      'Invalid Authorization header. Expected "Bearer <JWT>".'
     );
-    return;
-  }
 
   try {
     (req as AuthorizedRequest).tokenPayload = getTokenPayload(token);
   } catch (e) {
-    if (e instanceof JsonWebTokenError) {
-      sendAuthentificationError(`Invalid JWT token: ${e.message}.`, res);
-      return;
-    }
+    if (e instanceof JsonWebTokenError)
+      throw new AuthorizationApiError(`Invalid JWT token: ${e.message}.`);
 
     throw e;
   }
