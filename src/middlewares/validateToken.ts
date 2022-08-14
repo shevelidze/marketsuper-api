@@ -1,7 +1,15 @@
-import { RequestHandler } from 'express';
+import { RequestHandler, Request } from 'express';
 import { JsonWebTokenError } from 'jsonwebtoken';
-import { getTokenFromHeader, getTokenPayload } from '../utils/token';
+import {
+  getTokenFromHeader,
+  getTokenPayload,
+  UserTokenPayload,
+} from '../utils/token';
 import { sendAuthentificationError } from '../utils/errors';
+
+export interface AuthorizedRequest extends Request {
+  tokenPayload: UserTokenPayload;
+}
 
 const unlocked = process.argv.includes('unlocked');
 
@@ -34,8 +42,7 @@ const validateTokenMiddleware: RequestHandler = (req, res, next) => {
   }
 
   try {
-    const tokenPayload = getTokenPayload(token);
-    console.log(tokenPayload);
+    (req as AuthorizedRequest).tokenPayload = getTokenPayload(token);
   } catch (e) {
     if (e instanceof JsonWebTokenError) {
       sendAuthentificationError(`Invalid JWT token: ${e.message}.`, res);

@@ -1,11 +1,15 @@
 import { graphqlHTTP } from 'express-graphql';
-import { rootSchema } from '../models';
+import { AuthorizedRequest } from '../middlewares/validateToken';
+import { graphqlSchema } from '../models';
 
 const rootValue = {
-  getMe: () => {
+  getMe: (args, req: AuthorizedRequest) => {
     return {
-      firstName: 'Denys',
-      lastName: 'Shevel',
+      id: req.tokenPayload.id,
+      firstName: req.tokenPayload.firstName,
+      lastName: req.tokenPayload.lastName,
+      email: req.tokenPayload.email,
+      address: req.tokenPayload.address,
     };
   },
   getCartItems: () => {
@@ -14,7 +18,7 @@ const rootValue = {
 };
 
 const graphqlController = graphqlHTTP({
-  schema: rootSchema,
+  schema: graphqlSchema,
   rootValue,
   graphiql: true,
 });

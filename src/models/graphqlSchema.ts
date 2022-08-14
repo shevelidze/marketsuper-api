@@ -1,10 +1,17 @@
 import { buildSchema } from 'graphql';
 
-const rootSchema = buildSchema(`#graphql
+const graphqlSchema = buildSchema(`#graphql
   type User {
     id: ID!,
     firstName: String!,
-    lastName: String!
+    lastName: String!,
+  }
+  type Me {
+    id: ID!,
+    firstName: String!,
+    lastName: String!,
+    email: String!,
+    address: String
   }
   type Review {
     id: ID!,
@@ -76,11 +83,11 @@ const rootSchema = buildSchema(`#graphql
     sortings: [SortingDefinition!]!
   }
   type Query {
-    getMe: User!,
+    getMe: Me!,
     getCartItems: [Item!]!,
     getOrders: [Order!]!,
     getItemsFromCategory(categoryId: ID!, parameters: ItemsParameters): [Item!]!
   }
 `);
 
-export default rootSchema;
+export default graphqlSchema;

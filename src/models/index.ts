@@ -1,3 +1,3 @@
-import rootSchema from './rootSchema';
+import graphqlSchema from './graphqlSchema';
 
-export { rootSchema };
+export { graphqlSchema };
