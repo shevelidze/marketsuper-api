@@ -12,9 +12,7 @@ export interface User {
 }
 
 const requestUsers: Requestor<Collection<User>> = async (main) => {
-  return await requestDb(
-    async ({ db }) => await main(db.collection<User>('users'))
-  );
+  return requestDb(({ db }) => main(db.collection<User>('users')));
 };
 
 export default requestUsers;
