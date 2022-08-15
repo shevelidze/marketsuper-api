@@ -23,5 +23,5 @@ export function getTokenPayload(token: string) {
 }
 
 export function createUserToken(payload: UserTokenPayload) {
-  return sign(payload, secretKey);
+  return { token: sign(payload, secretKey) };
 }
