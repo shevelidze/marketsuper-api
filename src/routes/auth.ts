@@ -14,6 +14,17 @@ const emailPasswordSchema: Schema = {
   },
 };
 
+const usernamePasswordSchema: Schema = {
+  properties: {
+    username: {
+      type: 'string',
+    },
+    password: {
+      type: 'string',
+    },
+  },
+};
+
 const userDataSchema: Schema = {
   properties: {
     email: { type: 'string' },
@@ -34,6 +45,14 @@ authRouter.post(
     'Expected json which contains email and password.'
   ),
   auth.loginEmailPasswordController
+);
+authRouter.post(
+  '/login_admin',
+  createValidateBodyMiddleware(
+    usernamePasswordSchema,
+    'Expected json which contains username and password.'
+  ),
+  auth.loginAdminController
 );
 authRouter.post(
   '/register',

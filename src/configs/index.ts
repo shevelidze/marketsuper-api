@@ -1,5 +1,5 @@
-import secretKey from './secretKey';
+import secretKeys from './secretKeys';
 import appConfig from './app';
 import dbClient from './db';
 
-export { secretKey, appConfig, dbClient };
+export { secretKeys, appConfig, dbClient };
