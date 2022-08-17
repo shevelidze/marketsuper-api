@@ -1,6 +1,6 @@
 import express from 'express';
 import { appConfig } from './configs';
-import { authRouter, graphqlRouter, imagesRouter } from './routes';
+import { authRouter, graphqlRouter, imagesRouter, adminRouter } from './routes';
 import { ApiError } from './utils/errors';
 
 const app = express();
@@ -8,6 +8,7 @@ const app = express();
 app.use('/auth', authRouter);
 app.use('/graphql', graphqlRouter);
 app.use('/images', imagesRouter);
+app.use('/admin', adminRouter);
 
 app.use((err, req, res, next) => {
   if (err instanceof ApiError) {

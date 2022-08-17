@@ -1,7 +1,13 @@
-import { verify, JsonWebTokenError, JwtPayload, sign } from 'jsonwebtoken';
+import {
+  verify,
+  JsonWebTokenError,
+  JwtPayload,
+  sign,
+  decode,
+} from 'jsonwebtoken';
 import { secretKeys } from '../configs';
 
-export interface UserTokenPayload extends JwtPayload {
+export interface UserTokenConfig {
   id: string;
   email: string;
   firstName: string;
@@ -9,8 +15,22 @@ export interface UserTokenPayload extends JwtPayload {
   address: string | null;
 }
 
-export interface AdminTokenPayload extends JwtPayload {
+export interface AdminTokenConfig {
   id: string;
+}
+
+export type TokenType = 'admin' | 'user';
+
+export interface TokenPayload extends JwtPayload {
+  type: TokenType;
+}
+
+export interface UserTokenPayload extends UserTokenConfig, TokenPayload {
+  type: 'user';
+}
+
+export interface AdminTokenPayload extends AdminTokenConfig, TokenPayload {
+  type: 'admin';
 }
 
 export function getTokenFromHeader(header: string): string | null {
@@ -18,18 +38,36 @@ export function getTokenFromHeader(header: string): string | null {
   return execResult?.[0] || null;
 }
 
-export function getTokenPayload(token: string) {
-  const tokenPayload = verify(token, secretKeys.users);
+export function getTokenPayload(
+  token: string
+): AdminTokenPayload | UserTokenPayload {
+  let tokenPayload = decode(token);
   if (typeof tokenPayload === 'string')
     throw new JsonWebTokenError('invalid payload.');
 
-  return tokenPayload as UserTokenPayload;
+  verify(
+    token,
+    (tokenPayload as TokenPayload).type === 'admin'
+      ? secretKeys.admin
+      : secretKeys.users
+  );
+
+  return tokenPayload as AdminTokenPayload | UserTokenPayload;
 }
 
-export function createUserToken(payload: UserTokenPayload) {
-  return { token: sign({ ...payload, type: 'user' }, secretKeys.users) };
+function packToken(payload: TokenPayload) {
+  return {
+    token: sign(
+      { ...payload },
+      payload.type === 'user' ? secretKeys.users : secretKeys.admin
+    ),
+  };
 }
 
-export function createAdminToken(payload: AdminTokenPayload) {
-  return { token: sign({ ...payload, type: 'admin' }, secretKeys.admin) };
+export function createUserToken(payload: UserTokenConfig) {
+  return packToken({ ...payload, type: 'user' });
+}
+
+export function createAdminToken(payload: AdminTokenConfig) {
+  return packToken({ ...payload, type: 'admin' });
 }

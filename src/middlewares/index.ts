@@ -1,4 +1,4 @@
-import validateTokenMiddleware from './validateToken';
+import createValidateTokenMiddleware from './validateToken';
 import createValidateBodyMiddleware from './validateBody';
 
-export { validateTokenMiddleware, createValidateBodyMiddleware };
+export { createValidateTokenMiddleware, createValidateBodyMiddleware };

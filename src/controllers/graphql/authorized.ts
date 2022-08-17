@@ -1,9 +1,10 @@
 import { graphqlHTTP } from 'express-graphql';
 import { AuthorizedRequest } from '../../middlewares/validateToken';
 import { authorizedGraphQLSchema } from '../../models';
+import { UserTokenPayload } from '../../utils/token';
 
 const rootValue = {
-  getMe: (args, req: AuthorizedRequest) => {
+  getMe: (args, req: AuthorizedRequest<UserTokenPayload>) => {
     return {
       id: req.tokenPayload.id,
       firstName: req.tokenPayload.firstName,
