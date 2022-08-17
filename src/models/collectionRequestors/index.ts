@@ -5,6 +5,7 @@ import requestOrders from './orders';
 import requestProperties from './properties';
 import requestPropertiesValues from './propertyValues';
 import requestImages from './images';
+import requestAdministrators from './administrators';
 
 export {
   requestUsers,
@@ -14,4 +15,5 @@ export {
   requestProperties,
   requestPropertiesValues,
   requestImages,
+  requestAdministrators,
 };

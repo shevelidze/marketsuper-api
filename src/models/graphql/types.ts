@@ -1,6 +1,4 @@
-import { buildSchema } from 'graphql';
-
-const graphqlSchema = buildSchema(`#graphql
+const typesDefinition = `#graphql
   type User {
     id: ID!,
     firstName: String!,
@@ -45,20 +43,21 @@ const graphqlSchema = buildSchema(`#graphql
     address: String!,
     status: OrderStatus!
   }
-  type CategoryPropertyValue {
+  type PropertyValue {
     id: ID!,
     value: String!
   }
-  type CategoryProperty {
+  type Property {
     id: ID!,
     name: String!,
-    values: [CategoryPropertyValue!]!
+    values: [PropertyValue!]!
   }
   type Category {
     id: ID!,
     name: String!,
+    parent: Category,
     subcategories: [Category!]!,
-    properties: [CategoryProperty!]!
+    properties: [Property!]!
   }
   type SortingValue {
     id: ID!,
@@ -69,25 +68,6 @@ const graphqlSchema = buildSchema(`#graphql
     name: String!,
     values: [SortingValue!]!
   }
-  input PriceRange {
-    from: Float!,
-    to: Float!
-  }
-  input SortingDefinition {
-    sortingId: ID!,
-    valueId: ID!
-  }
-  input ItemsParameters {
-    priceRange: PriceRange,
-    propertiesValuesIds: [ID!]
-    sortings: [SortingDefinition!]!
-  }
-  type Query {
-    getMe: Me!,
-    getCartItems: [Item!]!,
-    getOrders: [Order!]!,
-    getItemsFromCategory(categoryId: ID!, parameters: ItemsParameters): [Item!]!
-  }
-`);
+`;
 
-export default graphqlSchema;
+export default typesDefinition;

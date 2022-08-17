@@ -1,6 +1,6 @@
 import { graphqlHTTP } from 'express-graphql';
-import { AuthorizedRequest } from '../middlewares/validateToken';
-import { graphqlSchema } from '../models';
+import { AuthorizedRequest } from '../../middlewares/validateToken';
+import { authorizedGraphQLSchema } from '../../models';
 
 const rootValue = {
   getMe: (args, req: AuthorizedRequest) => {
@@ -17,10 +17,10 @@ const rootValue = {
   },
 };
 
-const graphqlController = graphqlHTTP({
-  schema: graphqlSchema,
+const authorizedGraphQLController = graphqlHTTP({
+  schema: authorizedGraphQLSchema,
   rootValue,
   graphiql: true,
 });
 
-export default graphqlController;
+export default authorizedGraphQLController;
