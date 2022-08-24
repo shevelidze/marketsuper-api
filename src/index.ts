@@ -1,9 +1,12 @@
 import express from 'express';
+import cors from 'cors';
 import { appConfig } from './configs';
 import { authRouter, graphqlRouter, imagesRouter, adminRouter } from './routes';
 import { ApiError } from './utils/errors';
 
 const app = express();
+
+app.use(cors());
 
 app.use('/auth', authRouter);
 app.use('/graphql', graphqlRouter);

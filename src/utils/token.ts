@@ -47,7 +47,7 @@ export function getTokenPayload(
 
   verify(
     token,
-    (tokenPayload as TokenPayload).type === 'admin'
+    (tokenPayload as TokenPayload)?.type === 'admin'
       ? secretKeys.admin
       : secretKeys.users
   );

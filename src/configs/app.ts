@@ -1,5 +1,5 @@
 const appConfig = {
-  port: 3000,
+  port: 8000,
 };
 
 export default appConfig;
