@@ -17,6 +17,7 @@ const loginEmailPasswordController: RequestHandler = async (req, res, next) => {
           firstName: 1,
           lastName: 1,
           address: 1,
+          email: 1,
         },
       }
     );
